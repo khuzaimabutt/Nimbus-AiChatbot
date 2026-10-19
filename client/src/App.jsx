@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ChatBot from "./components/ChatBot.jsx";
 import AdminPanel from "./components/AdminPanel.jsx";
 import * as Icon from "./components/Icons.jsx";
+import { prefersReduced, useInView } from "./motion.js";
 
 const openChat = () => window.dispatchEvent(new Event("nimbus:open"));
 
@@ -20,7 +21,34 @@ const FEATURES = [
   { i: Icon.Layers, t: "Plain stack", d: "React, Node and Postgres. Nothing exotic to host or maintain." },
 ];
 
+// Script for the hero card: [stage to show, ms to wait before showing it]. The last step resets the card.
+const PV_STEPS = [[1, 900], [2, 1000], [3, 1400], [4, 1200], [5, 900], [6, 1400], [7, 700], [0, 4200]];
+
 function Preview() {
+  const reduced = prefersReduced();
+  const [stage, setStage] = useState(reduced ? 7 : 0);
+  const [k, setK] = useState(0);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const onVis = () => setVisible(!document.hidden);
+    onVis();
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, []);
+
+  useEffect(() => {
+    if (reduced || !visible) return;
+    const [next, ms] = PV_STEPS[k % PV_STEPS.length];
+    const t = setTimeout(() => {
+      setStage(next);
+      setK(k + 1);
+    }, ms);
+    return () => clearTimeout(t);
+  }, [k, visible, reduced]);
+
+  // stage: 1 user, 2 typing, 3 reply, 4 user, 5 typing, 6 reply, 7 chips
+  const on = (n) => (stage >= n ? " on" : "");
   return (
     <figure className="preview" aria-label="Illustration of a conversation with the assistant">
       <div className="pv-head">
@@ -30,12 +58,18 @@ function Preview() {
           <span><i aria-hidden="true" /> AI assistant</span>
         </div>
       </div>
-      <div className="pv-body">
-        <p className="pv-u">How much is Pro for a team of 8?</p>
-        <p className="pv-a">Pro is $12 per user per month, or $10 billed yearly. For 8 people that is $96 monthly, or $80 on the yearly plan.</p>
-        <p className="pv-u">Can I try it first?</p>
-        <p className="pv-a">Yes, 14 days of Pro, no credit card needed.</p>
-        <div className="pv-chips"><span>Which integrations?</span><span>Refund policy</span></div>
+      <div className={`pv-body${stage === 0 ? " reset" : ""}`}>
+        <div className={`pv-slot u${on(1)}`}><p className="pv-u">How much is Pro for a team of 8?</p></div>
+        <div className="pv-slot a">
+          <span className={`pv-typing${stage === 2 ? " on" : ""}`} aria-hidden="true"><b /><b /><b /></span>
+          <p className={`pv-a${on(3)}`}>Pro is $12 per user per month, or $10 billed yearly. For 8 people that is $96 monthly, or $80 on the yearly plan.</p>
+        </div>
+        <div className={`pv-slot u${on(4)}`}><p className="pv-u">Can I try it first?</p></div>
+        <div className="pv-slot a">
+          <span className={`pv-typing${stage === 5 ? " on" : ""}`} aria-hidden="true"><b /><b /><b /></span>
+          <p className={`pv-a${on(6)}`}>Yes, 14 days of Pro, no credit card needed.</p>
+        </div>
+        <div className={`pv-chips${on(7)}`}><span style={{ "--i": 0 }}>Which integrations?</span><span style={{ "--i": 1 }}>Refund policy</span></div>
       </div>
       <figcaption>Illustration, sample business facts</figcaption>
     </figure>
@@ -43,6 +77,9 @@ function Preview() {
 }
 
 function Landing() {
+  const [stepsRef, stepsIn] = useInView(0.2);
+  const [bentoRef, bentoIn] = useInView(0.15);
+  const [sizesRef, sizesIn] = useInView(0.4);
   return (
     <main id="main">
       <section className="hero">
@@ -70,9 +107,9 @@ function Landing() {
         <div className="wrap">
           <p className="eyebrow">How it works</p>
           <h2 id="how-h">Three steps, one source of truth</h2>
-          <ol className="steps">
-            {STEPS.map((s) => (
-              <li key={s.n}>
+          <ol className={`steps reveal${stepsIn ? " in" : ""}`} ref={stepsRef}>
+            {STEPS.map((s, n) => (
+              <li key={s.n} style={{ "--i": n }}>
                 <span className="step-n">{s.n}</span>
                 <h3>{s.t}</h3>
                 <p>{s.d}</p>
@@ -86,9 +123,9 @@ function Landing() {
         <div className="wrap">
           <p className="eyebrow">What is in it</p>
           <h2 id="feat-h">Built for the unglamorous parts of support</h2>
-          <ul className="bento">
-            {FEATURES.map(({ i: Ico, t, d, wide }) => (
-              <li key={t} className={wide ? "wide" : ""}>
+          <ul className={`bento reveal${bentoIn ? " in" : ""}`} ref={bentoRef}>
+            {FEATURES.map(({ i: Ico, t, d, wide }, n) => (
+              <li key={t} className={wide ? "wide" : ""} style={{ "--i": n }}>
                 <span className="b-ico"><Ico width={20} height={20} /></span>
                 <h3>{t}</h3>
                 <p>{d}</p>
@@ -109,7 +146,7 @@ function Landing() {
             </p>
             <button className="btn primary" onClick={openChat}>Open it now</button>
           </div>
-          <div className="size-demo" aria-hidden="true">
+          <div className={`size-demo${sizesIn ? " in" : ""}`} ref={sizesRef} aria-hidden="true">
             <div className="sd-col"><div className="sd s1"><i /></div><span>Bubble</span></div>
             <div className="sd-col"><div className="sd s2"><i /><i /><i /></div><span>Panel</span></div>
             <div className="sd-col grow"><div className="sd s3"><i /><i /><i /><i /><i /></div><span>Full screen</span></div>

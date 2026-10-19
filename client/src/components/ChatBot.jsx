@@ -355,8 +355,8 @@ export default function ChatBot() {
 
             {showSuggestions && (
               <div className="cb-suggestions" aria-label="Suggested questions">
-                {SUGGESTIONS.map((s) => (
-                  <button key={s} className="cb-chip" onClick={() => sendText(s)}>{s}</button>
+                {SUGGESTIONS.map((s, n) => (
+                  <button key={s} className="cb-chip" style={{ "--i": n }} onClick={() => { sendText(s); inputRef.current?.focus(); }}>{s}</button>
                 ))}
               </div>
             )}

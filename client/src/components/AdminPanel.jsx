@@ -121,8 +121,8 @@ export default function AdminPanel() {
               </div>
             ) : (
               <ul className="rows">
-                {rows.map((c) => (
-                  <li key={c.id}>
+                {rows.map((c, n) => (
+                  <li key={c.id} style={{ "--i": Math.min(n, 8) }}>
                     <button
                       className={`row ${current?.id === c.id ? "on" : ""}`}
                       onClick={() => pick(c.id)}
@@ -145,7 +145,7 @@ export default function AdminPanel() {
 
           <section className="inbox-detail" aria-label="Transcript">
             {current ? (
-              <>
+              <div className="detail-anim" key={current.id}>
                 <div className="detail-head">
                   <button className="back" onClick={() => setMobileDetail(false)}>
                     <Icon.Back width={18} height={18} /> All conversations
@@ -175,7 +175,7 @@ export default function AdminPanel() {
                     </li>
                   ))}
                 </ol>
-              </>
+              </div>
             ) : (
               <div className="empty">
                 <span className="empty-ico"><Icon.Chat width={26} height={26} /></span>

@@ -6,3 +6,4 @@ client/dist/
 .vercel
 *.log
 .DS_Store
+.tools/
