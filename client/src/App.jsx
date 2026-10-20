@@ -63,11 +63,13 @@ function Preview() {
         <div className="pv-slot a">
           <span className={`pv-typing${stage === 2 ? " on" : ""}`} aria-hidden="true"><b /><b /><b /></span>
           <p className={`pv-a${on(3)}`}>Pro is $12 per user per month, or $10 billed yearly. For 8 people that is $96 monthly, or $80 on the yearly plan.</p>
+          <span className={`pv-src${on(3)}`}>Source: Plans · How much is the Pro plan? <b>100% match</b></span>
         </div>
         <div className={`pv-slot u${on(4)}`}><p className="pv-u">Can I try it first?</p></div>
         <div className="pv-slot a">
           <span className={`pv-typing${stage === 5 ? " on" : ""}`} aria-hidden="true"><b /><b /><b /></span>
           <p className={`pv-a${on(6)}`}>Yes, 14 days of Pro, no credit card needed.</p>
+          <span className={`pv-src${on(6)}`}>Source: Plans · Is there a free trial? <b>100% match</b></span>
         </div>
         <div className={`pv-chips${on(7)}`}><span style={{ "--i": 0 }}>Which integrations?</span><span style={{ "--i": 1 }}>Refund policy</span></div>
       </div>

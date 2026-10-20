@@ -404,3 +404,13 @@ h3 { font-size: 1.12rem; font-weight: 650; letter-spacing: -0.005em; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+/* Source chip under an assistant reply: which knowledge entry answered, or a handoff. */
+.cb-source { display: block; margin-top: 8px; padding-top: 6px; border-top: 1px dashed var(--line, #d9d2c4); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.02em; color: var(--muted); }
+.cb-source small { color: var(--ember); }
+.cb-source.is-handoff { color: var(--ember); }
+
+/* Source line under a scripted reply in the hero preview. Fades in with the reply. */
+.pv-src { display: block; margin: 6px 0 10px; font-family: var(--font-mono); font-size: 11px; color: var(--muted); opacity: 0; transform: translateY(4px); transition: opacity 0.4s ease, transform 0.4s ease; }
+.pv-src.on { opacity: 1; transform: none; }
+.pv-src b { color: var(--ember); font-weight: 500; }

@@ -109,7 +109,7 @@ export default function ChatBot() {
         const isFallback = FALLBACK_RE.test(data.reply);
         setMessages((m) => [
           ...m,
-          { id: nextId(), role: "assistant", content: data.reply, error: isFallback },
+          { id: nextId(), role: "assistant", content: data.reply, error: isFallback, source: data.source, handoff: data.handoff },
         ]);
         setAnnounce(isFallback ? "The assistant could not be reached." : `Nimbus: ${data.reply}`);
         if (!isFallback && (data.leadCaptured || ASKS_FOR_EMAIL_RE.test(data.reply))) {
@@ -278,6 +278,14 @@ export default function ChatBot() {
                   {m.error && FALLBACK_RE.test(m.content)
                     ? "The assistant is not responding right now. Your message was saved. Try again, or leave your email and the team will follow up."
                     : m.content}
+                  {m.role === "assistant" && m.source && (
+                    <span className="cb-source">
+                      Source: {m.source.group} · {m.source.question} <small>{m.source.score}% match</small>
+                    </span>
+                  )}
+                  {m.role === "assistant" && m.handoff && (
+                    <span className="cb-source is-handoff">Not in our facts. Sent to the team.</span>
+                  )}
                   {m.file && (
                     <span className="cb-file">
                       <Icon.Clip width={14} height={14} /> {m.file.name} <small>{formatSize(m.file.size)}</small>
