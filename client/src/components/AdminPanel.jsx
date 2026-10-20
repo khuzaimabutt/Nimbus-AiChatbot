@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import * as Icon from "./Icons.jsx";
 
+// Opening words of the server's handoff reply (lib/entries.js HANDOFF_REPLY).
+const HANDOFF_START = "That isn't in our Nimbus facts";
+
 function timeLabel(iso) {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return "";
@@ -52,7 +55,15 @@ export default function AdminPanel() {
     () => conversations.reduce((n, c) => n + (c.messages || []).length, 0),
     [conversations]
   );
-  const rows = tab === "leads" ? leads : conversations;
+  // Questions the knowledge entries could not answer. The handoff reply always opens the same way.
+  const unanswered = useMemo(
+    () =>
+      conversations.filter((c) =>
+        (c.messages || []).some((m) => m.role === "assistant" && m.content?.startsWith(HANDOFF_START))
+      ),
+    [conversations]
+  );
+  const rows = tab === "leads" ? leads : tab === "unanswered" ? unanswered : conversations;
   const current = rows.find((c) => c.id === selected) || (mobileDetail ? null : rows[0]) || null;
 
   function pick(id) {
@@ -92,6 +103,7 @@ export default function AdminPanel() {
               {[
                 ["all", `All (${conversations.length})`],
                 ["leads", `Leads (${leads.length})`],
+                ["unanswered", `Unanswered (${unanswered.length})`],
               ].map(([k, label]) => (
                 <button
                   key={k}
@@ -112,11 +124,15 @@ export default function AdminPanel() {
             ) : rows.length === 0 ? (
               <div className="empty small">
                 <span className="empty-ico"><Icon.Inbox width={26} height={26} /></span>
-                <h2>{tab === "leads" ? "No leads yet" : "No conversations yet"}</h2>
+                <h2>
+                  {tab === "leads" ? "No leads yet" : tab === "unanswered" ? "No unanswered questions" : "No conversations yet"}
+                </h2>
                 <p>
                   {tab === "leads"
                     ? "Leads appear when a visitor shares an email in chat or fills the lead form."
-                    : "Open the chat widget on the site and send a message. It will show up here."}
+                    : tab === "unanswered"
+                      ? "Questions outside the company facts appear here, in the visitor's own words."
+                      : "Open the chat widget on the site and send a message. It will show up here."}
                 </p>
               </div>
             ) : (

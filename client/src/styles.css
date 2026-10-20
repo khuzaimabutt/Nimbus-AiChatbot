@@ -414,3 +414,26 @@ h3 { font-size: 1.12rem; font-weight: 650; letter-spacing: -0.005em; }
 .pv-src { flex-basis: 100%; margin: 6px 0 10px; font-family: var(--font-mono); font-size: 11px; color: #9aa3b5; opacity: 0; transform: translateY(4px); transition: opacity 0.4s ease, transform 0.4s ease; }
 .pv-src.on { opacity: 1; transform: none; }
 .pv-src b { color: #f0875a; font-weight: 500; }
+
+/* Knowledge strip under the hero preview: the matched entry lights up as its reply appears. */
+.pv-kb { margin-top: 12px; padding-top: 10px; border-top: 1px dashed #2a3247; font-family: var(--font-mono); font-size: 11px; color: #7f8ba3; }
+.pv-kb-h { display: block; margin-bottom: 6px; letter-spacing: 0.04em; text-transform: uppercase; }
+.pv-kb-i { margin: 2px 0; opacity: 0.45; transition: opacity 0.4s ease, color 0.4s ease; }
+.pv-kb-i.on { opacity: 1; color: #f0875a; }
+
+/* Install section: one script tag in a code card. */
+.install { display: grid; gap: 32px; align-items: center; }
+@media (min-width: 900px) { .install { grid-template-columns: 1fr 1fr; } }
+.install-code { background: var(--night); color: #e8edf6; border-radius: var(--r3); overflow: hidden; box-shadow: var(--shadow-2); }
+.install-code-top { padding: 10px 16px; font-family: var(--font-mono); font-size: 12px; color: #9fb0c8; border-bottom: 1px solid #2a3247; }
+.install-code pre { margin: 0; padding: 18px 16px; overflow-x: auto; font-family: var(--font-mono); font-size: 13px; line-height: 1.6; }
+
+/* Build notes: three short columns. */
+.notes-grid { display: grid; gap: 28px; margin-top: 24px; }
+@media (min-width: 900px) { .notes-grid { grid-template-columns: repeat(3, 1fr); } }
+.notes-grid h3 { margin: 0 0 8px; font-size: 16px; }
+.notes-grid p, .notes-grid li { color: var(--muted); line-height: 1.6; }
+.notes-grid ul { margin: 0; padding-left: 18px; }
+
+/* The widget alone inside the embed.js frame. */
+.embed-root { min-height: 100vh; background: transparent; }

@@ -73,6 +73,11 @@ function Preview() {
         </div>
         <div className={`pv-chips${on(7)}`}><span style={{ "--i": 0 }}>Which integrations?</span><span style={{ "--i": 1 }}>Refund policy</span></div>
       </div>
+      <div className="pv-kb" aria-hidden="true">
+        <span className="pv-kb-h">Knowledge · 13 entries</span>
+        <p className={`pv-kb-i${on(3)}`}>Plans · How much is the Pro plan?</p>
+        <p className={`pv-kb-i${on(6)}`}>Plans · Is there a free trial?</p>
+      </div>
       <figcaption>Illustration, sample business facts</figcaption>
     </figure>
   );
@@ -156,6 +161,47 @@ function Landing() {
         </div>
       </section>
 
+      <section className="section" id="install" aria-labelledby="ins-h">
+        <div className="wrap install">
+          <div>
+            <p className="eyebrow">Install</p>
+            <h2 id="ins-h">One script tag. Any site.</h2>
+            <p className="lede-sm">
+              Paste this before the closing body tag of your site. It adds a chat button in the corner and opens
+              the assistant in its own frame, so your site's styles and scripts cannot break it.
+            </p>
+          </div>
+          <div className="install-code">
+            <div className="install-code-top">index.html</div>
+            <pre><code>{`<script src="https://nimbus-ai-chatbot.vercel.app/embed.js" async></script>`}</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section className="section tint" aria-labelledby="notes-h">
+        <div className="wrap notes">
+          <h2 id="notes-h">Build notes</h2>
+          <div className="notes-grid">
+            <div>
+              <h3>The problem</h3>
+              <p>A support chat that invents a policy costs trust and money. Small teams need answers they can stand behind.</p>
+            </div>
+            <div>
+              <h3>The approach</h3>
+              <p>Each question is matched to one knowledge entry. Below the match bar, nothing is answered and the question goes to the team. The model only ever sees the entry it was given.</p>
+            </div>
+            <div>
+              <h3>What it does</h3>
+              <ul>
+                <li>Answers from entries, with the source shown on each reply</li>
+                <li>Captures leads and stores every conversation</li>
+                <li>Lists unanswered questions for the owner</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="section closing" aria-labelledby="c-h">
         <div className="wrap">
           <h2 id="c-h">Ask it something.</h2>
@@ -170,7 +216,20 @@ function Landing() {
   );
 }
 
+// The widget alone, opened, for the embed.js frame (App.jsx ?embed=1).
+function EmbedChat() {
+  useEffect(() => {
+    window.dispatchEvent(new Event("nimbus:open"));
+  }, []);
+  return (
+    <div className="embed-root">
+      <ChatBot />
+    </div>
+  );
+}
+
 export default function App() {
+  const embed = new URLSearchParams(location.search).has("embed");
   const [view, setView] = useState(() => (location.hash === "#admin" ? "admin" : "site"));
 
   useEffect(() => {
@@ -185,6 +244,8 @@ export default function App() {
     else history.replaceState(null, "", location.pathname);
     window.scrollTo(0, 0);
   }
+
+  if (embed) return <EmbedChat />;
 
   return (
     <div className="page">
