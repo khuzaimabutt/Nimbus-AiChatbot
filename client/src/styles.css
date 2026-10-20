@@ -24,9 +24,9 @@
   --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px; --s8: 72px; --s9: 112px;
   --r1: 8px; --r2: 14px; --r3: 22px; --r4: 30px;
 
-  --font-display: "Fraunces", "Iowan Old Style", Georgia, serif;
-  --font-ui: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: ui-monospace, "SF Mono", Consolas, monospace;
+  --font-display: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-ui: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SF Mono", Consolas, monospace;
 
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   --t-fast: 140ms;
@@ -94,7 +94,7 @@ a { color: inherit; }
 .pill { display: inline-flex; align-items: center; gap: var(--s2); padding: 6px 14px; border-radius: 999px; background: var(--card); border: 1px solid var(--line); font-size: 13px; font-weight: 600; color: var(--ink-2); margin-bottom: var(--s5); }
 .pill span { width: 8px; height: 8px; border-radius: 50%; background: var(--ember); }
 h1 { font-family: var(--font-display); font-weight: 500; font-size: clamp(2.5rem, 5.4vw, 4.4rem); line-height: 1.04; letter-spacing: -0.025em; font-variation-settings: "opsz" 144; text-wrap: balance; }
-h1 em { font-style: italic; color: var(--ember); font-weight: 400; }
+h1 em { font-style: normal; color: var(--ember); font-weight: 600; }
 .lede { margin-top: var(--s5); max-width: 34em; font-size: 1.15rem; color: var(--ink-2); }
 .cta-row { display: flex; flex-wrap: wrap; gap: var(--s3); margin-top: var(--s6); }
 .stack-note { margin-top: var(--s5); font-size: 14px; color: var(--muted); }
