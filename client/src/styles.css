@@ -411,6 +411,6 @@ h3 { font-size: 1.12rem; font-weight: 650; letter-spacing: -0.005em; }
 .cb-source.is-handoff { color: var(--ember); }
 
 /* Source line under a scripted reply in the hero preview. Fades in with the reply. */
-.pv-src { display: block; margin: 6px 0 10px; font-family: var(--font-mono); font-size: 11px; color: var(--muted); opacity: 0; transform: translateY(4px); transition: opacity 0.4s ease, transform 0.4s ease; }
+.pv-src { flex-basis: 100%; margin: 6px 0 10px; font-family: var(--font-mono); font-size: 11px; color: #9aa3b5; opacity: 0; transform: translateY(4px); transition: opacity 0.4s ease, transform 0.4s ease; }
 .pv-src.on { opacity: 1; transform: none; }
-.pv-src b { color: var(--ember); font-weight: 500; }
+.pv-src b { color: #f0875a; font-weight: 500; }
