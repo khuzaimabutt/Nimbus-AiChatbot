@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import * as Icon from "./Icons.jsx";
+import { readSessionKnowledge, addSessionKnowledge, clearSessionKnowledge } from "../sessionKnowledge.js";
 
 // Opening words of the server's handoff reply (lib/entries.js HANDOFF_REPLY).
 const HANDOFF_START = "That isn't in our Nimbus facts";
@@ -20,6 +21,55 @@ function titleOf(c) {
 }
 
 // Reads every stored conversation and captured lead back from the backend.
+// The customer's words for the question the assistant could not answer.
+function questionOf(c) {
+  const msgs = c.messages || [];
+  const handoff = msgs.findIndex((m) => m.role === "assistant" && m.content?.startsWith(HANDOFF_START));
+  for (let j = handoff - 1; j >= 0; j--) if (msgs[j].role === "user") return msgs[j].content;
+  return "";
+}
+
+// Owner answer, kept in this tab's session only. The chat in this tab uses it; other visitors do not.
+function AddKnowledge({ question }) {
+  const [answer, setAnswer] = useState("");
+  const [list, setList] = useState(() => readSessionKnowledge());
+  const [note, setNote] = useState("");
+
+  function add() {
+    const text = answer.trim();
+    if (!question || !text) return;
+    setList(addSessionKnowledge(question, text.slice(0, 500)));
+    setAnswer("");
+    setNote("Added. This tab's chat now answers it. It is not saved on the server.");
+  }
+
+  function clear() {
+    setList(clearSessionKnowledge());
+    setNote("Cleared this tab's additions.");
+  }
+
+  return (
+    <section className="add-knowledge" aria-label="Add to knowledge">
+      <h3>Answer once, add to knowledge</h3>
+      <p className="small">Customer asked: <strong>{question || "no question found"}</strong></p>
+      <label className="small">
+        Your answer
+        <textarea value={answer} maxLength={500} rows={3} onChange={(e) => setAnswer(e.target.value)} />
+      </label>
+      <div className="add-knowledge-actions">
+        <button className="btn primary" disabled={!question || !answer.trim()} onClick={add}>
+          Add to this session
+        </button>
+        {list.length > 0 && (
+          <button className="btn ghost" onClick={clear}>Clear session additions ({list.length})</button>
+        )}
+      </div>
+      {note && <p className="small" role="status">{note}</p>}
+      <p className="small">Demo limit: additions last only while this browser tab is open.</p>
+    </section>
+  );
+}
+
 export default function AdminPanel() {
   const [conversations, setConversations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -191,6 +241,7 @@ export default function AdminPanel() {
                     </li>
                   ))}
                 </ol>
+                {tab === "unanswered" && <AddKnowledge key={current.id} question={questionOf(current)} />}
               </div>
             ) : (
               <div className="empty">

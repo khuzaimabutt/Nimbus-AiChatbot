@@ -437,3 +437,24 @@ h3 { font-size: 1.12rem; font-weight: 650; letter-spacing: -0.005em; }
 
 /* The widget alone inside the embed.js frame. */
 .embed-root { min-height: 100vh; background: transparent; }
+
+/* Owner view: add an answer for an unanswered question (this tab's session only). */
+.add-knowledge { margin-top: var(--s5); padding-top: var(--s4); border-top: 1px solid var(--line); display: grid; gap: var(--s3); }
+.add-knowledge h3 { margin: 0; font-size: 16px; }
+.add-knowledge label { display: grid; gap: 6px; color: var(--muted); }
+.add-knowledge textarea { width: 100%; font: inherit; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--r2); background: #fff; color: var(--ink); resize: vertical; }
+.add-knowledge-actions { display: flex; flex-wrap: wrap; gap: var(--s3); }
+
+/* Ink hero: dark background, light type. The preview card is lifted so it stands off the dark. */
+.hero { background: var(--night); color: #e8edf6; }
+.hero::before { background: #2a4a6e; opacity: 0.55; }
+.hero::after { background: #7a2e12; opacity: 0.45; }
+.hero h1 { color: #ffffff; }
+.hero h1 em { color: #ff9b6e; }
+.hero .lede { color: #b8c4d8; }
+.hero .pill { background: var(--night-2); border-color: #2a3a55; color: #e8edf6; }
+.hero .stack-note { color: #8e9bb3; }
+.hero .btn.ghost { border-color: #e8edf6; color: #e8edf6; }
+.hero .btn.ghost:hover { background: #e8edf6; color: var(--night); }
+.hero .preview { background: var(--night-2); border: 1px solid #2a3a55; box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.6); }
+.hero .pv-kb { border-top-color: #2a3a55; }

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as Icon from "./Icons.jsx";
+import { readSessionKnowledge } from "../sessionKnowledge.js";
 
 const WELCOME = {
   id: "welcome",
@@ -101,7 +102,7 @@ export default function ChatBot() {
         const res = await fetch("/api/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: text, conversationId }),
+          body: JSON.stringify({ message: text, conversationId, extra: readSessionKnowledge() }),
         });
         const data = await res.json().catch(() => ({}));
         if (data.conversationId) setConversationId(data.conversationId);
